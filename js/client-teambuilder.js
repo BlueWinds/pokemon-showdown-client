@@ -1472,6 +1472,9 @@
 				this.importSetButtons();
 				return;
 			}
+			// We fetch this as 'text' and JSON.parse it ourserves in order to have consistent behavior
+			// between the localdev CORS helper and the real jQuery.get function, which would already parse
+			// this into an object based on the content-type header.
 			$.get('https://play.pokemonshowdown.com/data/sets/' + format + '.json', {}, function (data) {
 				try {
 					self.smogonSets[format] = JSON.parse(data);
@@ -1481,7 +1484,7 @@
 					self.smogonSets[format] = false;
 				}
 				self.importSetButtons();
-			});
+			}, 'text');
 		},
 		importSetButtons: function () {
 			var formatSets = this.smogonSets[this.curTeam.format];
